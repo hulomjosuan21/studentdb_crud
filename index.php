@@ -94,8 +94,10 @@ require_once('connection.php');
                             <td><?php echo $row->birthdate ?></td>
                             <td><?php echo $row->country ?></td>
                             <td>
-                                <a href="" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#addmodal">Edit</a>
-                                <a href="delete.php?id=<?php echo $id; ?>" class="btn btn-danger">Delete</a>
+                                <form action="delete.php" method="POST">
+                                    <input type="hidden" value="<?php echo $row->id; ?>" name="id">
+                                    <button type="submit" class="btn btn-danger" name="deleteStudent">Delete</button>
+                                </form>
                             </td>
                         </tr>
                         <?php
