@@ -1,5 +1,8 @@
 <?php
 require_once('connection.php');
+$newConnection->addStudent();
+$newConnection->editStudent();
+$newConnection->deleteStudent();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,28 +16,28 @@ require_once('connection.php');
 
 <body>
     <div class="container mt-2">
-        <form action="process.php" method="POST">
+        <form action="" method="POST">
             <div class="row">
                 <div class="col">
                     <label for="firstname" class="form-label">First Name</label>
-                    <input type="text" class="form-control mb-2" id="firstname" name="firstname" value="Josuan Leonardo">
+                    <input type="text" class="form-control mb-2" id="firstname" name="firstname" required>
                     <label for="firstname" class="form-label">Gender</label>
-                    <select class="form-select mb-2" aria-label="Default select example" name="gender">
+                    <select class="form-select mb-2" aria-label="Default select example" name="gender" required>
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
                     </select>
                 </div>
                 <div class="col">
                     <label for="lastname" class="form-label">Last Name</label>
-                    <input type="text" class="form-control mb-2" id="lastname" name="lastname" value="Hulom">
+                    <input type="text" class="form-control mb-2" id="lastname" name="lastname" required>
                     <label for="birthdate" class="form-label">Last Name</label>
-                    <input type="date" class="form-control mb-2" id="birthdate" name="birthdate" value="2004-02-21">
+                    <input type="date" class="form-control mb-2" id="birthdate" name="birthdate" required>
                 </div>
                 <div class="col">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control mb-2" id="email" name="email" value="test@email.com">
+                    <input type="email" class="form-control mb-2" id="email" name="email" required>
                     <label for="country" class="form-label">Country</label>
-                    <input type="text" class="form-control mb-2" id="country" name="country" value="Philippines">
+                    <input type="text" class="form-control mb-2" id="country" name="country" required>
                 </div>
             </div>
             <div class="row">
@@ -45,24 +48,24 @@ require_once('connection.php');
         </form>
     </div>
 
-    <div class="container">
+    <div class="container mt-2 mb-2">
         <?php
         session_start();
-        if (isset($_SESSION["create"])) {
+        if (isset($_SESSION["out"])) {
         ?>
-          <div class="alert alert-success">
-            <?php
-            echo $_SESSION["create"];
-            unset($_SESSION["create"]);
-            ?>
-          </div>
+            <div class="alert alert-success">
+                <?php
+                echo $_SESSION["out"];
+                unset($_SESSION["out"]);
+                ?>
+            </div>
         <?php
         }
         ?>
     </div>
 
     <div class="container mt-2">
-        <table class="table table-bordered table-striped">
+        <table class="table">
             <thead>
                 <tr>
                     <th scope="col">#ID</th>
@@ -73,6 +76,7 @@ require_once('connection.php');
                     <th scope="col">Birthdate</th>
                     <th scope="col">Country</th>
                     <th scope="col">Actions</th>
+                    <th scope="col"></th>
                 </tr>
             </thead>
             <tbody>
@@ -84,7 +88,7 @@ require_once('connection.php');
 
                 if ($result) {
                     foreach ($result as $row) {
-                        ?>
+                ?>
                         <tr>
                             <td><?php echo $row->id ?></td>
                             <td><?php echo $row->first_name ?></td>
@@ -94,13 +98,17 @@ require_once('connection.php');
                             <td><?php echo $row->birthdate ?></td>
                             <td><?php echo $row->country ?></td>
                             <td>
-                                <form action="delete.php" method="POST">
-                                    <input type="hidden" value="<?php echo $row->id; ?>" name="id">
-                                    <button type="submit" class="btn btn-danger" name="deleteStudent">Delete</button>
+                                <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#exampleModal<?= $row->id; ?>">Edit</button>
+                            </td>
+                            <td>
+                                <form action="" method="POST">
+                                    <button class="btn btn-danger" value="<?php echo $row->id ?>" name="delete_student">Delete</button>
                                 </form>
                             </td>
+                            <?php include("edit_modal.php"); ?>
+
                         </tr>
-                        <?php
+                <?php
                     }
                 }
                 ?>
